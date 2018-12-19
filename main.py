@@ -11,7 +11,7 @@ x = 0
 old = 0
 
 
-def on_new_connection(client, result):
+def accept_image_and_send_result(client, result):
     global x, n, old
     print(time.time() - old)
     all_msg = ""
@@ -26,7 +26,8 @@ def on_new_connection(client, result):
             client.close()
             print("断开连接")
             return 1
-
+        
+        # 接收心跳信号
         if "!" in msg:
             msg = msg.replace("!", "")
             all_msg += msg
@@ -37,6 +38,7 @@ def on_new_connection(client, result):
         if all_msg != "" and all_msg[0] == "]":
             all_msg = ""
 
+        # 清空所有线条
         if "clear" in all_msg:
             plt.clf()
             all_msg = ""
@@ -46,6 +48,7 @@ def on_new_connection(client, result):
             plt.plot(line[0], line[1])
             all_msg = all_msg[all_msg.index("|") + 1:]
 
+        # 成功绘制出一幅图片并保存
         if "end" in all_msg:
             old = time.time()
             plt.axis("off")
@@ -63,5 +66,5 @@ print('Waiting for connect...')
 while True:
     client_executor, addr = listener.accept()
     print('Accept new connection')
-    t = threading.Thread(target=traning.evaluate_one_image, args=(on_new_connection, client_executor))
+    t = threading.Thread(target=traning.evaluate_image_from_client, args=(accept_image_and_send_result, client_executor))
     t.start()
