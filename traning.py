@@ -65,7 +65,7 @@ def run_training():
     sess.close()
 
 
-def evaluate_one_image(func, arg1):
+def evaluate_image_from_client(func, arg1):
     max_index = -1
     logs_train_dir = 'model\\'
 
@@ -98,6 +98,10 @@ def evaluate_one_image(func, arg1):
             prediction = sess.run(logit, feed_dict={x: img})
             max_index = np.argmax(prediction)
             print(max_index, prediction)
+            
+            
+if __name__ == "__main__":
+    run_training()
 
 
 # def test():
@@ -119,7 +123,7 @@ def evaluate_one_image(func, arg1):
 #             for j in range(6):
 #                 try:
 #                     old = time.time()
-#                     log = "C:\\Users\zhr\PycharmProjects\mahuo\\1\\" + str(j) + "--" + str(i) + ".png"
+#                     log = "data\\" + str(j) + "--" + str(i) + ".png"
 #                     img = Image.open(log).convert('L')
 #                     img = np.array(img, 'f').reshape((1, IMG_H, IMG_W, CHANNELS))
 #                     prediction = sess.run(logit, feed_dict={x: img})
